@@ -1,3 +1,4 @@
+
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
@@ -5,6 +6,7 @@ const cors = require('cors');
 const app = express();
 app.use(cors());
 app.use(express.json());
+app.use(express.static('public'));
 
 mongoose.connect(process.env.MONGODB_URI)
   .then(() => console.log('MongoDB connected'))
@@ -25,4 +27,4 @@ app.post('/api/todos', async (req, res) => {
   res.json(todo);
 });
 
-app.listen(3000, () => console.log('Server running on port 3000'));
+app.listen(3000, '0.0.0.0', () => console.log('Server running on port 3000'));
