@@ -14,6 +14,7 @@ mongoose.connect(process.env.MONGODB_URI)
 
 const Todo = mongoose.model('Todo', {
   text: String,
+  completed: { type: Boolean, default: false },
 });
 
 app.get('/api/todos', async (req, res) => {
@@ -28,3 +29,9 @@ app.post('/api/todos', async (req, res) => {
 });
 
 app.listen(3000, '0.0.0.0', () => console.log('Server running on port 3000'));
+
+app.put('/api/todos/:id', async (req, res) => {
+  const { completed } = req.body;
+  const todo = await Todo.findByIdAndUpdate(req.params.id, { completed }, { new: true });
+  res.json(todo);
+});

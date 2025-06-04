@@ -3,6 +3,16 @@
 <head>
   <meta charset="UTF-8">
   <title>Todo App</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 2rem;
+    }
+    li.done {
+      text-decoration: line-through;
+      color: gray;
+    }
+  </style>
 </head>
 <body>
   <h1>Todos</h1>
@@ -17,22 +27,39 @@
       const tasks = await res.json();
       const list = document.getElementById('todo-list');
       list.innerHTML = '';
+
       tasks.forEach(task => {
         const li = document.createElement('li');
-        li.textContent = task.text;
+        if (task.completed) li.classList.add('done');
+
+        const checkbox = document.createElement('input');
+        checkbox.type = 'checkbox';
+        checkbox.checked = task.completed;
+
+        checkbox.addEventListener('change', async () => {
+          await fetch(`/api/todos/${task._id}`, {
+            method: 'PUT',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ completed: checkbox.checked })
+          });
+          fetchTasks();
+        });
+
+        li.appendChild(checkbox);
+        li.append(` ${task.text}`);
         list.appendChild(li);
       });
     }
 
     async function addTask() {
       const input = document.getElementById('new-task');
-      const title = input.value;
-      if (!title) return;
+      const text = input.value.trim();
+      if (!text) return;
 
       await fetch('/api/todos', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ text: title })
+        body: JSON.stringify({ text })
       });
 
       input.value = '';
