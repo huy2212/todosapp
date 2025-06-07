@@ -35,3 +35,8 @@ app.put('/api/todos/:id', async (req, res) => {
   const todo = await Todo.findByIdAndUpdate(req.params.id, { completed }, { new: true });
   res.json(todo);
 });
+
+app.delete('/api/todos', async (req, res) => {
+  await Todo.deleteMany({});
+  res.json({ message: 'All tasks deleted' });
+});
