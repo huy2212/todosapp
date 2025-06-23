@@ -5,7 +5,11 @@ services:
     image: mongo:6
     container_name: mongodb
     ports:
+<<<<<<< HEAD
       - "27018:27017"
+=======
+      - "27017:27017"
+>>>>>>> e2ffae50ae8c43aa5fcfdcce753be7480dfacea1
     volumes:
       - mongo-data:/data/db
 
